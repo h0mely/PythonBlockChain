@@ -13,10 +13,10 @@ class Tree:
         m = hashlib.md5()  # 括号内也可以传值，类型也要求是bytes类型
         m.update(item.encode('utf-8')) #
         return m.hexdigest()
-    def creat_leaf_node(self,artical):    #artical 为要存储的数据的列表，用于构造默克尔树叶子节点
+    def creat_leaf_node(self,article):    #article 为要存储的数据的列表，用于构造默克尔树叶子节点
         nodes=[]
-        for i in range(len(artical)):     #构造叶子节点
-            text=artical[i]
+        for i in range(len(article)):     #构造叶子节点
+            text=article[i]
             node=Tree_node()
             node.data=text
             node.hash=self.get_hash(text)   #后续可添加自然段对signal赋值
@@ -54,24 +54,24 @@ class Tree:
             root=self.creat_tree(temp_store_nodes)    #递归调用分层构造
         return root
 
-    def test_change(self,store_node,artical_node):
-        if(store_node.hash==artical_node.hash):     #哈希值相等则该处的子树均正确不用检查
+    def test_change(self,store_node,article_node):
+        if(store_node.hash==article_node.hash):     #哈希值相等则该处的子树均正确不用检查
             return
         else:
             if(store_node.lchild==None and store_node.rchild==None):   #若为叶子节点则是被篡改处，记录位置
                 self.change_location.append(store_node.signal)
             if(store_node.lchild!=None):         #检测左子树
-                self.test_change(store_node.lchild,artical_node.lchild)
+                self.test_change(store_node.lchild,article_node.lchild)
             if(store_node.rchild!=None):      #检测右子树
-                self.test_change(store_node.rchild,artical_node.rchild)
-    def is_change(self,artical):
+                self.test_change(store_node.rchild,article_node.rchild)
+    def is_change(self,article):
         my_tree=Tree()
-        artical_root = my_tree.creat_leaf_node(artical)  # 篡改数据的默克尔树
-        self.test_change(self.root,artical_root)
+        article_root = my_tree.creat_leaf_node(article)  # 篡改数据的默克尔树
+        self.test_change(self.root,article_root)
         return self.change_location
 
 tree=Tree()
 list=['我',"喜","欢","你","啊","啊"]              #模拟原始数据
-artical_list=['我',"喜","欢","我","啊","啊"]    #模拟数据被篡改
+article_list=['我',"喜","欢","我","啊","啊"]    #模拟数据被篡改
 root=tree.creat_leaf_node(list)                #原始数据的默克尔树
-print(tree.is_change(artical_list))             #打印出被篡改处
+print(tree.is_change(article_list))             #打印出被篡改处
