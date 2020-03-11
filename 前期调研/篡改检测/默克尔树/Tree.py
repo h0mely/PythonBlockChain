@@ -1,6 +1,6 @@
 import hashlib
 
-from 默克尔树.Tree_node import Tree_node
+from Tree_node import *
 #本函数实现功能：
 #要求数据：将文章各段存入列表中
 #构造树：creat_leaf_node(列表)
