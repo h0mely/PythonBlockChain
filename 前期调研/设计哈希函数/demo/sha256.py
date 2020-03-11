@@ -29,15 +29,15 @@ _h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
 
 
 def _pad(msglen):
-    mdi = msglen & 0x3F
-    length = struct.pack('!Q', msglen << 3)
+    mdi = msglen & 0x3F # 11,1111
+    length = struct.pack('!Q', msglen << 3) # Q 表示 unsigned long long  为8*8=64位
 
     if mdi < 56:
         padlen = 55 - mdi
     else:
         padlen = 119 - mdi
 
-    return b'\x80' + (b'\x00' * padlen) + length
+    return b'\x80' + (b'\x00' * padlen) + length # 0x80 = 1000,0000
 
 
 def _rotr(x, y):
@@ -61,14 +61,14 @@ class SHA256:
     def __init__(self, m=None):
         self._counter = 0
         self._cache = b''
-        self._k = copy.deepcopy(_k)
+        self._k = copy.deepcopy(_k)  # 深复制
         self._h = copy.deepcopy(_h)
 
         self.update(m)
 
     def _compress(self, c):
         w = [0] * 64
-        w[0:16] = struct.unpack('!16L', c)
+        w[0:16] = struct.unpack('!16L', c)  # 拆成16个unsigned long 一个有32位
 
         for i in range(16, 64):
             s0 = _rotr(w[i - 15], 7) ^ _rotr(w[i - 15], 18) ^ (w[i - 15] >> 3)
@@ -92,7 +92,8 @@ class SHA256:
             b = a
             a = (t1 + t2) & F32
 
-        for i, (x, y) in enumerate(zip(self._h, [a, b, c, d, e, f, g, h])):
+        for i, (x, y) in enumerate(zip(self._h, [a, b, c, d, e, f, g, h])):  # enumerate()函数创建索引值
+            # zip（）函数用于将多个可迭代对象作为参数，依次将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的对象。
             self._h[i] = (x + y) & F32
 
     def update(self, m):
@@ -102,7 +103,8 @@ class SHA256:
         self._counter += len(m)
         m = self._cache + m
 
-        for i in range(0, len(m) // 64):
+        # 代码将 输入m按照64*8 = 512 位分块处理
+        for i in range(0, len(m) // 64):  # //在python中，这个叫“地板除”，3//2=1
             self._compress(m[64 * i:64 * (i + 1)])
         self._cache = m[-(len(m) % 64):]
 
@@ -113,7 +115,7 @@ class SHA256:
         return b''.join(data)
 
     def hexdigest(self):
-        return binascii.hexlify(self.digest()).decode('ascii')
+        return binascii.hexlify(self.digest()).decode('ascii')  # hexlify其作用是返回的二进制数据的十六进制表示
 
 
 def true_sha256(message):
@@ -127,7 +129,7 @@ def my_sha256(message):
 
 
 if __name__ == '__main__':
-    demo = ["", "a", "abc", "message digest", "abcdefghijklmnopqrstuvwxyz",
+    demo = ["a", "abc", "message digest", "abcdefghijklmnopqrstuvwxyz",
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
             "12345678901234567890123456789012345678901234567890123456789012345678901234567890",
             "你好，SHA256"]
