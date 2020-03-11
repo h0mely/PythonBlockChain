@@ -129,7 +129,7 @@ def my_sha256(message):
 
 
 if __name__ == '__main__':
-    demo = ["a", "abc", "message digest", "abcdefghijklmnopqrstuvwxyz",
+    demo = ["","a", "abc", "message digest", "abcdefghijklmnopqrstuvwxyz",
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
             "12345678901234567890123456789012345678901234567890123456789012345678901234567890",
             "你好，SHA256"]
