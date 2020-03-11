@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import copy
 import struct
 import binascii
@@ -103,4 +101,8 @@ class SHA256:
 
 if __name__ == '__main__':
     A = '刘伟asddajgksdjkasdjasbj*(jdlasbdljasbdjlasdbashgdasdvashdvshlJL_(d-aw0eqw;nask;njkas;gcJLGupdwqt812hdakw;dnask;fho[urqwhwkafbasjbdsa;kdbqwiorpyqwipdcbas'
+    B = 'asd'
     print(SHA256(A).getData())
+    print(SHA256(B).getData())
+    # print(H[1])
+    # print(rightRotate(H[1],3))
